@@ -1,0 +1,72 @@
+.text-box {
+  height: 43px;
+  position: relative;
+  width: 144px;
+}
+
+.text-box .left-bracket {
+  height: 45px;
+  left: -1px;
+  position: absolute;
+  top: -1px;
+  width: 16px;
+}
+
+.text-box .right-bracket {
+  height: 45px;
+  left: 129px;
+  position: absolute;
+  top: -1px;
+  width: 16px;
+}
+
+.text-box .bottom-line {
+  height: 2px;
+  left: 15px;
+  object-fit: cover;
+  position: absolute;
+  top: 42px;
+  width: 114px;
+}
+
+.text-box .top-line-auto-layout {
+  align-items: center;
+  display: flex;
+  height: 10px;
+  left: 15px;
+  position: absolute;
+  top: -6px;
+  width: 114px;
+}
+
+.text-box .label {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: -1px;
+  margin-top: -1px;
+  padding: 0px 4px;
+  position: relative;
+  width: fit-content;
+}
+
+.text-box .label-2 {
+  color: #000000;
+  font-family: "Inter", Helvetica;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: normal;
+  margin-top: -1px;
+  position: relative;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.text-box .top-line {
+  flex: 1;
+  height: 2px;
+  min-width: 79px;
+  position: relative;
+}

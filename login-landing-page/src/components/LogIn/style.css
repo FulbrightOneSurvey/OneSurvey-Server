@@ -1,0 +1,41 @@
+.log-in {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: 2px;
+  position: relative;
+  width: fit-content;
+}
+
+.log-in .button {
+  align-items: center;
+  background-color: #00196e;
+  border: 2px solid;
+  border-color: #ffffff;
+  box-shadow: -4px 4px 0px #000000;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 16px 18px;
+  position: relative;
+  width: fit-content;
+}
+
+.log-in .text-wrapper {
+  color: #ffffff;
+  font-family: "Sora", Helvetica;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 14px;
+  margin-top: -2px;
+  position: relative;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.log-in .arrow {
+  height: 8.75px;
+  min-width: 8.28px;
+  position: relative;
+}

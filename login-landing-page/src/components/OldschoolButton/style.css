@@ -1,0 +1,63 @@
+.oldschool-button {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: fit-content;
+}
+
+.oldschool-button .div {
+  align-items: center;
+  background-color: #ffffff;
+  border: 2px solid;
+  border-color: #000000;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 16px 18px;
+  position: relative;
+  width: fit-content;
+}
+
+.oldschool-button .sign-up {
+  color: #000000;
+  font-family: "Source Code Pro", Helvetica;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 14px;
+  margin-top: -2px;
+  position: relative;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.oldschool-button .img {
+  position: relative;
+}
+
+.oldschool-button.hover-true {
+  padding: 0px 0px 4px 4px;
+}
+
+.oldschool-button.hover-false {
+  padding: 2px;
+}
+
+.oldschool-button.hover-true .div {
+  box-shadow: -6px 6px 0px #000000;
+}
+
+.oldschool-button.hover-false .div {
+  box-shadow: -4px 4px 0px #000000;
+}
+
+.oldschool-button.hover-true .img {
+  height: 8.75px;
+  min-width: 9.75px;
+}
+
+.oldschool-button.hover-false .img {
+  height: 8.53px;
+  min-width: 8.28px;
+}
