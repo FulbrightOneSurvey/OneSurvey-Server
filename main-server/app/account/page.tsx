@@ -14,11 +14,11 @@ export default async function AccountPage() {
             <h1>Account</h1>
             {/* // loop over userData and display it */}
             {userData.map((user) => (
-                <div key={user._id}>
-                    <h3>{user.name}</h3>
-                    <p>{user.email}</p>
-                    <p>{user.datejoined}</p>
-                    <p>{user.passwdhash}</p>
+                <div>
+                    <h2>{user.name}</h2>
+                    <h2>{user.email}</h2>
+                    <h2>{user.datejoined}</h2>
+                    <h2>{user.passwdhash}</h2>
                 </div>
             ))}
         </div>
