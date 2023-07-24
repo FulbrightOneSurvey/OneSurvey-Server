@@ -1,2 +1,2 @@
-main-server/pocketbase_0.16.10_linux_amd64/pb_data/data.db
-main-server/pocketbase_0.16.10_linux_amd64/pb_data/logs.db
+main-server/pocketbase_0.16.10_linux_amd64/pb_data
+main-server/pocketbase_0.16.10_linux_amd64/pb_migrations

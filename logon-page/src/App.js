@@ -29,7 +29,9 @@ function App() {
           </div>
         
           <MDBBtn className='mb-4 w-100' size='lg' style={{backgroundColor: '#102064'}}>Sign up</MDBBtn>
-          <MDBBtn className='mb-4 w-100' size='lg' style={{backgroundColor: '#FEA200'}}>Log in</MDBBtn>
+          {/* Make login button redirect to /account */}
+          <MDBBtn className='mb-4 w-100' size='lg' style={{backgroundColor: '#FEA200'}} href='/account'>Log in</MDBBtn>
+
     
         </MDBCardBody>
       </MDBCard>
