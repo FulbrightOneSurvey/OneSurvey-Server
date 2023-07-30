@@ -1,12 +1,8 @@
-import Link from "next/link";
+import LoginPage from './login/page'
 
 export default function Home() {
     return (
-        // Navigation site to login page, contains a link ref to /login
-        <div>
-            <h1>Nav<br></br></h1>
-            {/* link to login page */}
-            <a href="/login">Login</a>
-        </div>
+        // shows the login page for now
+        <LoginPage />
     )
 }

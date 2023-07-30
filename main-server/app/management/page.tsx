@@ -9,7 +9,7 @@ import {
 
 } from 'mdb-react-ui-kit';
 
-export default function AccountPage() {
+export default function ManagementPage() {
     return (
         <div>
             {/* navbar using MDB, from left to right: menu icon, brand logo, get null credit button, div for user coin, div for user response */}
@@ -31,7 +31,7 @@ export default function AccountPage() {
                             loading="lazy"
                         />
                     </a>
-                    <a className="navbar-brand me-auto" href="#">
+                    <a className="navbar-brand me-auto" href="/management">
                         {/* Button style banner */}
                         <button type="button" className="btn btn-warning btn-rounded" color="#F9A31A">Get null credit to complete!</button>
                     </a>
@@ -57,7 +57,7 @@ export default function AccountPage() {
                             User name <br></br>
                         </p></h3>
                     </a>
-                    <a className="navbar-brand" href="#">
+                    <a className="navbar-brand" href="/account">
                         {/* User avatar */}
                         <img src="/user.svg" height="20" alt="Avatar Logo" loading="lazy" />
                     </a>
