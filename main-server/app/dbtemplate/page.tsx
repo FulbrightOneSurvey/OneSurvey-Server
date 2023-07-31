@@ -10,9 +10,9 @@ import { useState, useEffect} from 'react';
 
 export default function dbTemplate() {
   const [isClient, setIsClient] = useState(false); // client state to avoid hydration mismatch
-  const { login, isLoading, error } = useLogin();
-  const logout = useLogout();
-  const { isLoggedin, db } = dbQuery();
+  const { login, isLoading, error } = useLogin(); // login function
+  const logout = useLogout(); // logout function
+  const { isLoggedin, db } = dbQuery(); // database query function
 
   // will be called when hydration occurs
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function dbTemplate() {
   return (
     <div>
       {isClient && <div suppressHydrationWarning>
-        <h1>Logged in: {isLoggedin ? "True" : "False"}</h1>
+        <h1>Logged in: {isLoggedin ? 'True' : 'False'}</h1>
         <h1>Username: {isLoggedin && db?.name}</h1>
         <h1>Email: {isLoggedin && db?.email}</h1>
         <h1>UID: {isLoggedin && db?.id}</h1>

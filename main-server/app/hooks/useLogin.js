@@ -6,12 +6,13 @@ export default function useLogin() {
     const [ error, setError ] = useState(null); // error state to display error message
 
     async function login({email, password}) {
-        setLoading(true);
+        setLoading(true); // trigger loading state
         try {
+            // login with email and password
             const response = await pb.collection('users').authWithPassword(email, password);
         } catch (error) {
-            alert(error);
-            setError(error);
+            alert(error); // display error message in browser
+            setError(error); // get error message
         }
         setLoading(false);
     }
