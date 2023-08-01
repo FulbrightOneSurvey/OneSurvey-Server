@@ -23,7 +23,7 @@ export default function AccountPage() {
                 {/* <div className="mask" style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)' }}></div> */}
             </div>
             {/* User info container */}
-            <div className="container-fluid" style={{ backgroundColor: '#FFFFFF', position: 'relative', height: '20' }}>
+            <div className="container-fluid" style={{ backgroundColor: '#FFFFFF', position: 'relative', height: '20vh' }}>
                 {/* User profile picture offset to overlap with background image */}
                 <div className="card rounded-circle ms-20 col-3" style={{ backgroundColor: '#102064', width: '30vh', position: 'absolute', top: '-70%' }}>
                     <img src="/user.svg" className="card-img-top" alt="User name" />
@@ -50,6 +50,7 @@ export default function AccountPage() {
         
             <div className="container py-5 h-100">
                 <div className="row d-flex justify-content-center align-items-center h-100">
+                    <form id='account'>
                     <div className="card" style={{backgroundColor: '#CEEDF6', borderRadius: '20px'}}>
                         <div className="card-body">
                             <div className="row align-items-center pt-4 pb-3">
@@ -57,7 +58,7 @@ export default function AccountPage() {
                                     <h6 className="mb-0 fs-3 fw-bold">Full name</h6>
                                 </div>
                                 <div className="col-md-9 pe-5">
-                                    <input type="text" className="form-control form-control-lg" />
+                                    <input type="text" className="form-control form-control-lg" required/>
                                 </div>
                             </div>
                             <hr className="mx-n3"></hr>
@@ -77,7 +78,7 @@ export default function AccountPage() {
                                     <h6 className="mb-0 fs-3 fw-bold">Contact info</h6>
                                 </div>
                                 <div className="col-md-9 pe-5">
-                                    <input type="tel" className="form-control form-control-lg" placeholder='(+84)' pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"/>
+                                    <input type="tel" className="form-control form-control-lg" placeholder='(+84)' pattern="[0-9]{10}}"/>
                                 </div>
                             </div>
                             <hr className="mx-n3"></hr>
@@ -112,6 +113,8 @@ export default function AccountPage() {
                             </div>
                         </div>
                     </div>
+                    </form>
+                    
                     
 
                 </div>
