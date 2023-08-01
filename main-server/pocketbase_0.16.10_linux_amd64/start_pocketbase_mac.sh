@@ -1,0 +1,2 @@
+./pocketbase_mac serve
+
