@@ -1,14 +1,14 @@
 import { MDBDropdown, MDBDropdownMenu, MDBDropdownToggle, MDBDropdownItem } from 'mdb-react-ui-kit';
 
 import useLogout from './hooks/useLogout';
-import dbQuery from './components/dbQuery';
+import dbQuery from './components/userdbQuery';
 
 import { useState, useEffect} from 'react';
 
 export default function Navbar() {
     const [isClient, setIsClient] = useState(false); // client state to avoid hydration mismatch
     const logout = useLogout(); // logout function
-    const { isLoggedin, db } = dbQuery(); // database query function
+    const { isLoggedin, userdb } = dbQuery(); // user database query function
 
     // will be called when hydration occurs
     useEffect(() => {
@@ -56,7 +56,7 @@ export default function Navbar() {
                         {/* User coin */}
                         <h5 className="me-3 mb-lg-0 fw-bold">
                             Credit points <br></br>
-                            {isClient && isLoggedin ? db?.points : "Null"}
+                            {isClient && isLoggedin ? userdb?.points : "Null"}
                         </h5>
                         <img src="/coin.svg" height="20" alt="Coin Logo" loading="lazy" />
                     </a>
@@ -71,7 +71,7 @@ export default function Navbar() {
                     <a className="navbar-brand" href="#">
                         {/* User name */}
                         <h3 className="mb-lg-0 fw-bold">
-                            {isClient && isLoggedin ? db?.name : "Null"}
+                            {isClient && isLoggedin ? userdb?.name : "Null"}
                         </h3>
                     </a>
                     <MDBDropdown className="me-3">
@@ -82,6 +82,9 @@ export default function Navbar() {
                         </MDBDropdownToggle>
                         <MDBDropdownMenu>
                             <MDBDropdownItem link href="/account">Account management</MDBDropdownItem>
+                            <MDBDropdownItem divider />
+                            <MDBDropdownItem link href='/management'>Creator management</MDBDropdownItem>
+                            <MDBDropdownItem divider />
                             <MDBDropdownItem link onClick={onLogout}>Logout</MDBDropdownItem>
                         </MDBDropdownMenu>
                     </MDBDropdown>

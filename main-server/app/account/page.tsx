@@ -23,7 +23,7 @@ export default function AccountPage() {
                 {/* <div className="mask" style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)' }}></div> */}
             </div>
             {/* User info container */}
-            <div className="container-fluid" style={{ backgroundColor: '#FFFFFF', position: 'relative', height: '20' }}>
+            <div className="container-fluid" style={{ backgroundColor: '#FFFFFF', position: 'relative', height: '20vh' }}>
                 {/* User profile picture offset to overlap with background image */}
                 <div className="card rounded-circle ms-20 col-3" style={{ backgroundColor: '#102064', width: '30vh', position: 'absolute', top: '-70%' }}>
                     <img src="/user.svg" className="card-img-top" alt="User name" />
