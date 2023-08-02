@@ -6,7 +6,7 @@ import pb from '../components/pocketbase';
 import useLogout from '../hooks/useLogout';
 import userdbQuery from '../components/userdbQuery';
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 
 import {
     MDBBtn,
@@ -18,7 +18,6 @@ import {
 
 import Navbar from '../navbar';
 import { Record } from 'pocketbase';
-import { set } from 'react-hook-form';
 
 export default function ManagementPage() {
     const [isClient, setIsClient] = useState(false); // client state to avoid hydration mismatch

@@ -1,6 +1,13 @@
 'use client'
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import './App.css';
+
+import pb from '../components/pocketbase';
+import useLogout from '../hooks/useLogout';
+import userdbQuery from '../components/userdbQuery';
+
+import { useState, useEffect } from 'react';
+
 import {
     MDBBtn,
     MDBContainer,
@@ -12,6 +19,13 @@ import {
 import Navbar from '../navbar';
 
 export default function AccountPage() {
+    const [isClient, setIsClient] = useState(false); // client state to avoid hydration mismatch
+    const { isLoggedin, userdb } = userdbQuery(); // user database query function
+
+    // will be called when hydration occurs
+    useEffect(() => {
+        setIsClient(true);
+    }, [])
     
     function handleSubmit() {
         alert("Your account info has changed!");
@@ -36,10 +50,10 @@ export default function AccountPage() {
                 {/* User info card next to profile picture */}
                 <div className="card ms-auto col-xl-9 col-lg-7 col-md-6 col-sm-5" style={{ position: 'relative'}}>
                     <div className="card mt-3 me-1 row" style={{ backgroundColor: '#CEEDF6', position: 'relative', height: '12vh' }}>
-                        <p className="card-body d-flex align-items-center ms-3 fs-2 fw-bold col-6">Xin chào, User name!</p>
+                        {isClient && <p className="card-body d-flex align-items-center ms-3 fs-2 fw-bold col-6">Xin chào, {userdb?.name}</p>}
                         <div className="card-body ms-auto col-6 row">
                             <p className="fs-2 fw-bold col-8">Credit points:</p>
-                            <p className="card fs-2 fw-bold col-3">Null</p>
+                            {isClient && <p className="card fs-2 fw-bold col-3">{userdb?.points}</p>}
                         </div>
                     </div>
                 </div>
