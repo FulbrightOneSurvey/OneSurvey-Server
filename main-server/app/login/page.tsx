@@ -11,6 +11,7 @@
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import './App.css';
 
+import useRegister from '../hooks/useRegister';
 import useLogin from '../hooks/useLogin';
 import useLogout from '../hooks/useLogout';
 import userdbQuery from '../components/userdbQuery';
@@ -29,10 +30,12 @@ import {
 
 export default function LoginPage() {
   const [isClient, setIsClient] = useState(false); // client state to avoid hydration mismatch
+  const [isRegister, setIsRegister] = useState(false); // register state
   const [isTOSChecked, setTOSChecked] = useState(false); // TOS checkbox state
   const { register, handleSubmit } = useForm();
 
   const { login, isLoading, error } = useLogin(); // login function
+  const { onRegister, isLoadingR, errorR } = useRegister(); // register function
   const logout = useLogout(); // logout function
   const { isLoggedin, userdb } = userdbQuery(); // user database query function
 
@@ -52,8 +55,17 @@ export default function LoginPage() {
       alert('Please agree to the Terms of Service to continue.');
       return;
     }
-    // call login function
-    login({ email: data.email, password: data.password });
+    if (isRegister) {
+      // call register function
+      onRegister({ name: data.name, email: data.email, password: data.password, passwordconfirm: data.passwordconfirm });
+    } else {
+      // call login function
+      login({ email: data.email, password: data.password });
+    }
+  }
+
+  function handleRegister() {
+    setIsRegister(!isRegister);
   }
 
   if (isLoggedin) {
@@ -88,22 +100,23 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit(onSubmit)}>
               {/* input boxes for credentials */}
-              <MDBInput wrapperClass='mb-4' label='User name or email address' size='lg' type='text' {...register('email')} />
+              {isRegister && <MDBInput wrapperClass='mb-4' label='Username' size='lg' type='text' {...register('name')} />}
+              <MDBInput wrapperClass='mb-4' label='Email address' size='lg' type='text' {...register('email')} />
               <MDBInput wrapperClass='mb-4' label='Password' size='lg' type='password' {...register('password')} />
+              {isRegister && <MDBInput wrapperClass='mb-4' label='Confirm Password' size='lg' type='password' {...register('passwordconfirm')} />}
 
               {/* TOS checkbox */}
               <div className='d-flex flex-row justify-content-center mb-4'>
                 <MDBCheckbox className='flexCheck' id='toscheckbox' label='I agree all statements in Terms of service' onChange={handleCheckboxChange} />
               </div>
-
-              {/* TODO: separate Sign up and login button to call for 2 different function instead of submitting to a form*/}
-              <MDBBtn className='mb-4 w-100' size='lg' style={{ backgroundColor: '#102064' }} disabled={isLoading}>Sign up</MDBBtn>
-              <MDBBtn className='mb-4 w-100' size='lg' style={{ backgroundColor: '#FEA200' }} type='submit' disabled={isLoading}>{isLoading ? 'Logging in' : 'Log in'}</MDBBtn>
+              <MDBBtn className='mb-4 w-100' size='lg' style={{ backgroundColor: '#FEA200' }} type='submit' disabled={isLoading}>{isLoading ? isRegister ? 'Registering' : 'Logging' : isRegister ? 'Register' : 'Log In'}</MDBBtn>
             </form>
+            <MDBBtn className='mb-4 w-100' size='lg' style={{ backgroundColor: '#102064' }} disabled={isLoadingR} onClick={handleRegister}>{isRegister ? 'Nevermind' : 'Register?'}</MDBBtn>
 
             {/* client-side rendering div */}
             {isClient && <div suppressHydrationWarning>
               {isLoading && <p>Logging...</p>}
+              {isLoadingR && <p>Registering...</p>}
               <h1>Login state: {isLoggedin ? 'True' : 'False'}</h1>
             </div>}
           </MDBCardBody>
