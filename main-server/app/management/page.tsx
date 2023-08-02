@@ -4,7 +4,7 @@ import './App.css';
 
 import pb from '../components/pocketbase';
 import useLogout from '../hooks/useLogout';
-import dbQuery from '../components/userdbQuery';
+import userdbQuery from '../components/userdbQuery';
 
 import { useState, useEffect, use } from 'react';
 
@@ -22,8 +22,9 @@ import { Record } from 'pocketbase';
 
 export default function ManagementPage() {
     const [isClient, setIsClient] = useState(false); // client state to avoid hydration mismatch
+    const [isFetched, setIsFetched] = useState(false); // fetched state to avoid fetching multiple times
     const logout = useLogout(); // logout function
-    const { isLoggedin, userdb } = dbQuery(); // user database query function
+    const { isLoggedin, userdb } = userdbQuery(); // user database query function
     const [numOfSurveyPublished, setNumOfSurveyPublished] = useState(0);
     const [numOfSurveyCompleted, setNumOfSurveyCompleted] = useState(0);
     const [numOfSurveyInProgress, setNumOfSurveyInProgress] = useState(0);
@@ -38,41 +39,42 @@ export default function ManagementPage() {
     }, [])
 
     async function getAllSurveyFromUser() {
-        // fetch all surveys with filter userid as current user
-        const records = await pb.collection('surveys').getFullList({
-            filter: "userid = '" + userdb?.id + "'",
-        });
-        setNumOfSurveyPublished(records.length);
-        
-        // loop through all surveys and count the stats
-        let completed = 0;
-        let inprogress = 0;
-        let inapprove = 0;
-        let filled = 0;
-        let views = 0;
-        let reports = 0;
-        records.forEach((record: Record) => {
-            if (record['currentrecord'] == record['targetrecord']) completed++;
-            if (record['currentrecord'] < record['targetrecord'] && record['isactive'] == true) inprogress++;
-            if (record['isapprove'] == false) inapprove++;
-            filled += record['currentrecord'];
-            views += record['views'];
-            if (record['currentrecord'] < record['targetrecord'] && record['isactive'] == false && record['isapprove'] == false) reports++;
-        });
-        setNumOfSurveyCompleted(completed);
-        setNumOfSurveyInProgress(inprogress);
-        setNumOfSurveyInApprove(inapprove);
-        setNumOfSurVeyResponseRatio(((filled/views)*100).toFixed(2));
-        setNumOfSurVeyViews(views);
-        setNumOfSurVeyReports(reports);
-        return records;
+        if (isFetched == false) {
+            // fetch all surveys with filter userid as current user
+            const records = await pb.collection('surveys').getFullList({
+                filter: "userid = '" + userdb?.id + "'",
+            });
+            setNumOfSurveyPublished(records.length);
+            
+            // loop through all surveys and count the stats
+            let completed = 0;
+            let inprogress = 0;
+            let inapprove = 0;
+            let filled = 0;
+            let views = 0;
+            let reports = 0;
+            records.forEach((record: Record) => {
+                if (record['currentrecord'] == record['targetrecord']) completed++;
+                if (record['currentrecord'] < record['targetrecord'] && record['isactive'] == true) inprogress++;
+                if (record['isapprove'] == false) inapprove++;
+                filled += record['currentrecord'];
+                views += record['views'];
+                if (record['currentrecord'] < record['targetrecord'] && record['isactive'] == false && record['isapprove'] == false) reports++;
+            });
+            setNumOfSurveyCompleted(completed);
+            setNumOfSurveyInProgress(inprogress);
+            setNumOfSurveyInApprove(inapprove);
+            setNumOfSurVeyResponseRatio(((filled/views)*100).toFixed(2));
+            setNumOfSurVeyViews(views);
+            setNumOfSurVeyReports(reports);
+            console.log(records);
+            setIsFetched(true);
+            return records;
+        }
     }
 
-    // run once when component is mounted
-    useEffect(() => {
-        const surveyList = getAllSurveyFromUser();
-        console.log(surveyList);
-    }, []);
+    // run once
+    getAllSurveyFromUser();
     
 
     return (

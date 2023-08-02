@@ -13,7 +13,7 @@ import './App.css';
 
 import useLogin from '../hooks/useLogin';
 import useLogout from '../hooks/useLogout';
-import dbQuery from '../components/userdbQuery';
+import userdbQuery from '../components/userdbQuery';
 
 import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
@@ -34,7 +34,7 @@ export default function LoginPage() {
 
   const { login, isLoading, error } = useLogin(); // login function
   const logout = useLogout(); // logout function
-  const { isLoggedin, userdb } = dbQuery(); // user database query function
+  const { isLoggedin, userdb } = userdbQuery(); // user database query function
 
   // will be called when hydration occurs
   useEffect(() => {
