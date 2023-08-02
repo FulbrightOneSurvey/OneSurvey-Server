@@ -51,7 +51,7 @@ export default function Navbar() {
                     </a>
                     <a className="navbar-brand me-auto" href="/management">
                         {/* Button style banner */}
-                        <button type="button" className="btn btn-warning btn-rounded" color="#F9A31A">Get null credit to complete!</button>
+                        <button type="button" className="btn btn-warning btn-rounded" color="#F9A31A">Go to survey management page</button>
                     </a>
                     <a className="navbar-brand me-auto" href="/upload">
                         {/* Button style banner */}
@@ -86,6 +86,8 @@ export default function Navbar() {
                             <img src="/user.svg" height="20" alt="Avatar Logo" loading="lazy" />
                         </MDBDropdownToggle>
                         <MDBDropdownMenu>
+                            <MDBDropdownItem link href="/dashboard_page">Dashboard</MDBDropdownItem>
+                            <MDBDropdownItem divider />
                             <MDBDropdownItem link href="/account">Account management</MDBDropdownItem>
                             <MDBDropdownItem divider />
                             <MDBDropdownItem link href='/management'>Creator management</MDBDropdownItem>

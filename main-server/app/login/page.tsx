@@ -81,7 +81,7 @@ export default function LoginPage() {
               {/* make sure pb.authStore.model is not null */}
               {isLoggedin && <h1>Welcome back, {userdb?.name}, redirecting in 3 seconds</h1>}
               {/* redirect after 3 seconds */}
-              {isLoggedin && <meta httpEquiv="refresh" content="3;url=/account" />}
+              {isLoggedin && <meta httpEquiv="refresh" content="3;url=/dashboard_page" />}
               {/* Log out button only appear when logged in*/}
               {isLoggedin && <MDBBtn className='mb-4 w-100' size='lg' style={{ backgroundColor: '#102064' }} onClick={logout}>Log out</MDBBtn>}
             </div>}
