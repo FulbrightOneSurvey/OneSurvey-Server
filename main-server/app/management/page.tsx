@@ -17,14 +17,15 @@ import {
 } from 'mdb-react-ui-kit';
 
 import Navbar from '../navbar';
-import { data } from 'autoprefixer';
 import { Record } from 'pocketbase';
+import { set } from 'react-hook-form';
 
 export default function ManagementPage() {
     const [isClient, setIsClient] = useState(false); // client state to avoid hydration mismatch
     const [isFetched, setIsFetched] = useState(false); // fetched state to avoid fetching multiple times
     const logout = useLogout(); // logout function
     const { isLoggedin, userdb } = userdbQuery(); // user database query function
+    var runOnce = false;
     const [numOfSurveyPublished, setNumOfSurveyPublished] = useState(0);
     const [numOfSurveyCompleted, setNumOfSurveyCompleted] = useState(0);
     const [numOfSurveyInProgress, setNumOfSurveyInProgress] = useState(0);
@@ -32,6 +33,7 @@ export default function ManagementPage() {
     const [numOfSurveyResponseRatio, setNumOfSurVeyResponseRatio] = useState("Null");
     const [numOfSurveyViews, setNumOfSurVeyViews] = useState(0);
     const [numOfSurveyReports, setNumOfSurVeyReports] = useState(0);
+    const [surveyDB, setSurveyDB] = useState<Record[]>([]);
 
     // will be called when hydration occurs
     useEffect(() => {
@@ -39,13 +41,14 @@ export default function ManagementPage() {
     }, [])
 
     async function getAllSurveyFromUser() {
-        if (isFetched == false) {
+        if (!runOnce) {
+            runOnce = true;
             // fetch all surveys with filter userid as current user
             const records = await pb.collection('surveys').getFullList({
                 filter: "userid = '" + userdb?.id + "'",
             });
             setNumOfSurveyPublished(records.length);
-            
+
             // loop through all surveys and count the stats
             let completed = 0;
             let inprogress = 0;
@@ -64,18 +67,16 @@ export default function ManagementPage() {
             setNumOfSurveyCompleted(completed);
             setNumOfSurveyInProgress(inprogress);
             setNumOfSurveyInApprove(inapprove);
-            setNumOfSurVeyResponseRatio(((filled/views)*100).toFixed(2));
+            setNumOfSurVeyResponseRatio(((filled / views) * 100).toFixed(2));
             setNumOfSurVeyViews(views);
             setNumOfSurVeyReports(reports);
-            console.log(records);
+            setSurveyDB(records);
             setIsFetched(true);
             return records;
         }
     }
 
-    // run once
     getAllSurveyFromUser();
-    
 
     return (
         <div>
@@ -109,38 +110,54 @@ export default function ManagementPage() {
                 </div>
             </div>
             {/* Dashboard summary banner */}
-            <div className="container-fluid" style={{ backgroundColor: '#102064', position: 'relative'}}>
+            <div className="container-fluid" style={{ backgroundColor: '#102064', position: 'relative' }}>
                 {/* Paddling */}
-                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height:'40px' }}/>
-                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', top:'10%' }}>
+                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height: '40px' }} />
+                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', top: '10%' }}>
                     <span className="d-flex align-items-center ms-3 fs-2 fw-bold" style={{ color: '#FEBE4D' }}>In total, you have</span>
                     <span className="d-flex align-items-center ms-3 fs-1 fw-bold" style={{ color: '#FFFFFF' }}> {isClient ? numOfSurveyPublished : "Null"} </span>
                     <span className="d-flex align-items-center ms-3 fs-2 fw-bold" style={{ color: '#FEBE4D' }}>survey that have uploaded.</span>
                 </div>
-                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height:'20px' }}/>
-                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', top:'10%' }}>
+                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height: '20px' }} />
+                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', top: '10%' }}>
                     <span className="d-flex align-items-center ms-3 fs-1 fw-bold" style={{ color: '#FFFFFF' }}> {isClient ? numOfSurveyCompleted : "Null"} </span>
                     <span className="d-flex align-items-center ms-3 fs-2 fw-bold" style={{ color: '#FEBE4D' }}>achieved goal - completed.</span>
                 </div>
-                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height:'20px' }}/>
-                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', top:'10%' }}>
+                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height: '20px' }} />
+                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', top: '10%' }}>
                     <span className="d-flex align-items-center ms-3 fs-1 fw-bold" style={{ color: '#FFFFFF' }}> {isClient ? numOfSurveyInProgress : "Null"} </span>
                     <span className="d-flex align-items-center ms-3 fs-2 fw-bold" style={{ color: '#FEBE4D' }}>in collecting process.</span>
                 </div>
-                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height:'20px' }}/>
-                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', top:'10%' }}>
+                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height: '20px' }} />
+                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', top: '10%' }}>
                     <span className="d-flex align-items-center ms-3 fs-1 fw-bold" style={{ color: '#FFFFFF' }}> {isClient ? numOfSurveyInApprove : "Null"} </span>
                     <span className="d-flex align-items-center ms-3 fs-2 fw-bold" style={{ color: '#FEBE4D' }}>in approving process.</span>
                 </div>
-                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height:'40px' }}/>
+                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height: '40px' }} />
             </div>
             {/* Dashboard summary detail */}
-            <div className="me-auto ms-auto container-fluid row" style={{ backgroundColor: '#102064', position: 'relative', height:'600px' }}>
+            <div className="me-auto ms-auto container-fluid row" style={{ backgroundColor: '#102064', position: 'relative', height: '600px' }}>
                 {/* Survey history short: 1/3 of screen width*/}
                 <div className="col-4">
                     {/* Scrollable card items list */}
-                    <div className="overflow-auto p-3" style={{ maxHeight:'500px' }}>
-                        <div className="card text-center mb-2" style={{ backgroundColor: '#CEEDF6' }}>
+                    <div className="overflow-auto p-3" style={{ maxHeight: '500px' }}>
+
+                        {/* generate the according number card for each numOfSurveyPublished */}
+                        {isClient ? [...Array(numOfSurveyPublished)].map((item, i) => {
+                            return (
+                                // pull data from SurveyDB for each card
+                                <div className="card text-center mb-2" style={{ backgroundColor: '#CEEDF6' }}>
+                                    <div className="card-body row">
+                                        <span className="card-text fs-3 fw-bold col-8" style={{ color: '#102064' }}>{surveyDB[i]?.name}</span>
+                                        <span className="card-text fs-6 fw-bold col-4" style={{ color: '#102064' }}>{surveyDB[i]?.surveycredit} credits</span>
+                                    </div>
+                                    {/* redirect to surveyDB[i]?.surveylink on click */}
+                                    <button type="button" className="btn btn-warning btn-rounded me-auto ms-auto mb-3" color="#F9A31A" onClick={() => window.open(surveyDB[i]?.surveylink, "_blank")}>View performance</button>
+                                </div>
+                            )
+                        }) : <div> Error: cannot fetch survey </div>}
+
+                        {/* <div className="card text-center mb-2" style={{ backgroundColor: '#CEEDF6' }}>
                             <div className="card-body row">
                                 <span className="card-text fs-3 fw-bold col-8" style={{ color: '#102064' }}>Survey name 1</span>
                                 <span className="card-text fs-6 fw-bold col-4" style={{ color: '#102064' }}>Null credits</span>
@@ -167,15 +184,15 @@ export default function ManagementPage() {
                                 <span className="card-text fs-6 fw-bold col-4" style={{ color: '#102064' }}>Null credits</span>
                             </div>
                             <button type="button" className="btn btn-warning btn-rounded me-auto ms-auto mb-3" color="#F9A31A">View performance</button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 {/* Survey performance short: 2/3 of screen width*/}
-                <div className="col-8" style={{ position: 'relative', height:'500px', top:'3%' }}>
+                <div className="col-8" style={{ position: 'relative', height: '500px', top: '3%' }}>
                     {/* Survey performance summary */}
                     <div className="row">
                         <div className="col-4">
-                            <div className="card text-center mb-2" style={{ backgroundColor: '#CEEDF6'}}>
+                            <div className="card text-center mb-2" style={{ backgroundColor: '#CEEDF6' }}>
                                 <div className="card-body">
                                     <p className="card-text fs-1 fw-bold" style={{ color: '#FEBE4D' }}>{isClient ? numOfSurveyResponseRatio : "Null"}%</p>
                                     <p className="card-text fs-3 fw-bold" style={{ color: '#102064' }}>Response rate</p>
@@ -183,7 +200,7 @@ export default function ManagementPage() {
                             </div>
                         </div>
                         <div className="col-4">
-                            <div className="card text-center mb-2" style={{ backgroundColor: '#CEEDF6'}}>
+                            <div className="card text-center mb-2" style={{ backgroundColor: '#CEEDF6' }}>
                                 <div className="card-body">
                                     <p className="card-text fs-1 fw-bold" style={{ color: '#FEBE4D' }}>{isClient ? numOfSurveyViews : "Null"}</p>
                                     <p className="card-text fs-3 fw-bold" style={{ color: '#102064' }}>Survey view</p>
@@ -191,7 +208,7 @@ export default function ManagementPage() {
                             </div>
                         </div>
                         <div className="col-4">
-                            <div className="card text-center mb-2" style={{ backgroundColor: '#CEEDF6'}}>
+                            <div className="card text-center mb-2" style={{ backgroundColor: '#CEEDF6' }}>
                                 <div className="card-body">
                                     <p className="card-text fs-1 fw-bold" style={{ color: '#FEBE4D' }}>{isClient ? numOfSurveyReports : "Null"}</p>
                                     <p className="card-text fs-3 fw-bold" style={{ color: '#102064' }}>Related report</p>
@@ -200,7 +217,7 @@ export default function ManagementPage() {
                         </div>
                     </div>
                     {/* Survey performance detail */}
-                    <div className="mt-3 card" style={{ backgroundColor: '#CEEDF6'}}>
+                    <div className="mt-3 card" style={{ backgroundColor: '#CEEDF6' }}>
                         <div className="card-body row">
                             <p className="card-text fs-3 fw-bold col-8 d-flex align-items-center" style={{ color: '#102064' }}>How has your response goal been so far?</p>
                             <img src="/chart.svg" className="col-4" alt="Survey performance chart" />
@@ -208,7 +225,7 @@ export default function ManagementPage() {
                     </div>
                 </div>
             </div>
-            <div className="container-fluid" style={{ backgroundColor: '#FFFFFF', position: 'relative', height: '100vh' }}/>
+            <div className="container-fluid" style={{ backgroundColor: '#FFFFFF', position: 'relative', height: '100vh' }} />
         </div>
     )
 }
