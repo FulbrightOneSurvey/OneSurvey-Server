@@ -88,7 +88,7 @@ export default function AccountPage() {
                                     <h6 className="mb-0 fs-3 fw-bold">Birthday</h6>
                                 </div>
                                 <div className="col-md-9 pe-5">
-                                    <input type="date" className="form-control form-control-lg" placeholder='(+84)'/>
+                                    <input type="date" className="form-control form-control-lg"/>
                                 </div>
                             </div>
                             <hr className="mx-n3"></hr>
