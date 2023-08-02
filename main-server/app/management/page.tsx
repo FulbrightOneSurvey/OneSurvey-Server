@@ -1,6 +1,13 @@
 'use client'
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import './App.css';
+
+import pb from '../components/pocketbase';
+import useLogout from '../hooks/useLogout';
+import dbQuery from '../components/userdbQuery';
+
+import { useState, useEffect, use } from 'react';
+
 import {
     MDBBtn,
     MDBContainer,
@@ -10,8 +17,64 @@ import {
 } from 'mdb-react-ui-kit';
 
 import Navbar from '../navbar';
+import { data } from 'autoprefixer';
+import { Record } from 'pocketbase';
 
 export default function ManagementPage() {
+    const [isClient, setIsClient] = useState(false); // client state to avoid hydration mismatch
+    const logout = useLogout(); // logout function
+    const { isLoggedin, userdb } = dbQuery(); // user database query function
+    const [numOfSurveyPublished, setNumOfSurveyPublished] = useState(0);
+    const [numOfSurveyCompleted, setNumOfSurveyCompleted] = useState(0);
+    const [numOfSurveyInProgress, setNumOfSurveyInProgress] = useState(0);
+    const [numOfSurveyInApprove, setNumOfSurveyInApprove] = useState(0);
+    const [numOfSurveyResponseRatio, setNumOfSurVeyResponseRatio] = useState("Null");
+    const [numOfSurveyViews, setNumOfSurVeyViews] = useState(0);
+    const [numOfSurveyReports, setNumOfSurVeyReports] = useState(0);
+
+    // will be called when hydration occurs
+    useEffect(() => {
+        setIsClient(true);
+    }, [])
+
+    async function getAllSurveyFromUser() {
+        // fetch all surveys with filter userid as current user
+        const records = await pb.collection('surveys').getFullList({
+            filter: "userid = '" + userdb?.id + "'",
+        });
+        setNumOfSurveyPublished(records.length);
+        
+        // loop through all surveys and count the stats
+        let completed = 0;
+        let inprogress = 0;
+        let inapprove = 0;
+        let filled = 0;
+        let views = 0;
+        let reports = 0;
+        records.forEach((record: Record) => {
+            if (record['currentrecord'] == record['targetrecord']) completed++;
+            if (record['currentrecord'] < record['targetrecord'] && record['isactive'] == true) inprogress++;
+            if (record['isapprove'] == false) inapprove++;
+            filled += record['currentrecord'];
+            views += record['views'];
+            if (record['currentrecord'] < record['targetrecord'] && record['isactive'] == false && record['isapprove'] == false) reports++;
+        });
+        setNumOfSurveyCompleted(completed);
+        setNumOfSurveyInProgress(inprogress);
+        setNumOfSurveyInApprove(inapprove);
+        setNumOfSurVeyResponseRatio(((filled/views)*100).toFixed(2));
+        setNumOfSurVeyViews(views);
+        setNumOfSurVeyReports(reports);
+        return records;
+    }
+
+    // run once when component is mounted
+    useEffect(() => {
+        const surveyList = getAllSurveyFromUser();
+        console.log(surveyList);
+    }, []);
+    
+
     return (
         <div>
             {/* Navbar */}
@@ -30,15 +93,15 @@ export default function ManagementPage() {
                 </div>
             </div>
             {/* User welcome banner */}
-            <div className="container-fluid" style={{ backgroundColor: '#FFFFFF', position: 'relative', height: '35vh' }}>
+            <div className="container-fluid row" style={{ backgroundColor: '#FFFFFF', position: 'relative', height: '300px' }}>
                 {/* User profile picture */}
-                <div className="me-auto ms-24 col-xl-2 col-lg-3 col-md-4 col-sm-5" style={{ position: 'relative', height: '15vh' }}>
+                <div className="me-auto ms-24 col-xl-2 col-lg-3 col-md-4 col-sm-5 d-flex align-items-center">
                     <img src="/user.svg" className="card-img-top" alt="User avatar" />
                 </div>
                 {/* Banner */}
-                <div className="ms-auto col-xl-8 col-lg-7 col-md-6 col-sm-5" style={{ backgroundColor: '#FFFFFF', position: 'relative', top:'-25%' }}>
-                    <div className="mt-4 m">
-                        <span className="d-flex align-items-center ms-3 fs-2 fw-bold">Xin chào, User name!</span>
+                <div className="ms-auto col-xl-8 col-lg-7 col-md-6 col-sm-5 d-flex align-items-center">
+                    <div>
+                        <span className="d-flex align-items-center ms-3 fs-2 fw-bold">Xin chào, {isClient ? userdb?.name : "Username"}!</span>
                         <span className="d-flex align-items-center ms-3 fs-4">Let’s we help you embrace your surveys’ performance!</span>
                     </div>
                 </div>
@@ -46,35 +109,35 @@ export default function ManagementPage() {
             {/* Dashboard summary banner */}
             <div className="container-fluid" style={{ backgroundColor: '#102064', position: 'relative'}}>
                 {/* Paddling */}
-                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height:'4vh' }}/>
+                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height:'40px' }}/>
                 <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', top:'10%' }}>
                     <span className="d-flex align-items-center ms-3 fs-2 fw-bold" style={{ color: '#FEBE4D' }}>In total, you have</span>
-                    <span className="d-flex align-items-center ms-3 fs-1 fw-bold" style={{ color: '#FFFFFF' }}> Null </span>
+                    <span className="d-flex align-items-center ms-3 fs-1 fw-bold" style={{ color: '#FFFFFF' }}> {isClient ? numOfSurveyPublished : "Null"} </span>
                     <span className="d-flex align-items-center ms-3 fs-2 fw-bold" style={{ color: '#FEBE4D' }}>survey that have uploaded.</span>
                 </div>
-                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height:'2vh' }}/>
+                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height:'20px' }}/>
                 <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', top:'10%' }}>
-                    <span className="d-flex align-items-center ms-3 fs-1 fw-bold" style={{ color: '#FFFFFF' }}> Null </span>
+                    <span className="d-flex align-items-center ms-3 fs-1 fw-bold" style={{ color: '#FFFFFF' }}> {isClient ? numOfSurveyCompleted : "Null"} </span>
                     <span className="d-flex align-items-center ms-3 fs-2 fw-bold" style={{ color: '#FEBE4D' }}>achieved goal - completed.</span>
                 </div>
-                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height:'2vh' }}/>
+                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height:'20px' }}/>
                 <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', top:'10%' }}>
-                    <span className="d-flex align-items-center ms-3 fs-1 fw-bold" style={{ color: '#FFFFFF' }}> Null </span>
+                    <span className="d-flex align-items-center ms-3 fs-1 fw-bold" style={{ color: '#FFFFFF' }}> {isClient ? numOfSurveyInProgress : "Null"} </span>
                     <span className="d-flex align-items-center ms-3 fs-2 fw-bold" style={{ color: '#FEBE4D' }}>in collecting process.</span>
                 </div>
-                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height:'2vh' }}/>
+                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height:'20px' }}/>
                 <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', top:'10%' }}>
-                    <span className="d-flex align-items-center ms-3 fs-1 fw-bold" style={{ color: '#FFFFFF' }}> Null </span>
+                    <span className="d-flex align-items-center ms-3 fs-1 fw-bold" style={{ color: '#FFFFFF' }}> {isClient ? numOfSurveyInApprove : "Null"} </span>
                     <span className="d-flex align-items-center ms-3 fs-2 fw-bold" style={{ color: '#FEBE4D' }}>in approving process.</span>
                 </div>
-                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height:'4vh' }}/>
+                <div className="d-flex align-items-center justify-content-center" style={{ position: 'relative', height:'40px' }}/>
             </div>
             {/* Dashboard summary detail */}
-            <div className="me-auto ms-auto container-fluid row" style={{ backgroundColor: '#102064', position: 'relative', height:'1000px' }}>
+            <div className="me-auto ms-auto container-fluid row" style={{ backgroundColor: '#102064', position: 'relative', height:'600px' }}>
                 {/* Survey history short: 1/3 of screen width*/}
                 <div className="col-4">
                     {/* Scrollable card items list */}
-                    <div className="overflow-auto p-3" style={{ maxHeight:'65vh' }}>
+                    <div className="overflow-auto p-3" style={{ maxHeight:'500px' }}>
                         <div className="card text-center mb-2" style={{ backgroundColor: '#CEEDF6' }}>
                             <div className="card-body row">
                                 <span className="card-text fs-3 fw-bold col-8" style={{ color: '#102064' }}>Survey name 1</span>
@@ -106,13 +169,13 @@ export default function ManagementPage() {
                     </div>
                 </div>
                 {/* Survey performance short: 2/3 of screen width*/}
-                <div className="col-8" style={{ position: 'relative', height:'65vh', top:'4%' }}>
+                <div className="col-8" style={{ position: 'relative', height:'500px', top:'3%' }}>
                     {/* Survey performance summary */}
-                    <div className="row" style={{ position: 'relative', height:'175px' }}>
+                    <div className="row">
                         <div className="col-4">
                             <div className="card text-center mb-2" style={{ backgroundColor: '#CEEDF6'}}>
                                 <div className="card-body">
-                                    <p className="card-text fs-1 fw-bold" style={{ color: '#FEBE4D' }}>Null%</p>
+                                    <p className="card-text fs-1 fw-bold" style={{ color: '#FEBE4D' }}>{isClient ? numOfSurveyResponseRatio : "Null"}%</p>
                                     <p className="card-text fs-3 fw-bold" style={{ color: '#102064' }}>Response rate</p>
                                 </div>
                             </div>
@@ -120,7 +183,7 @@ export default function ManagementPage() {
                         <div className="col-4">
                             <div className="card text-center mb-2" style={{ backgroundColor: '#CEEDF6'}}>
                                 <div className="card-body">
-                                    <p className="card-text fs-1 fw-bold" style={{ color: '#FEBE4D' }}>Null</p>
+                                    <p className="card-text fs-1 fw-bold" style={{ color: '#FEBE4D' }}>{isClient ? numOfSurveyViews : "Null"}</p>
                                     <p className="card-text fs-3 fw-bold" style={{ color: '#102064' }}>Survey view</p>
                                 </div>
                             </div>
@@ -128,14 +191,14 @@ export default function ManagementPage() {
                         <div className="col-4">
                             <div className="card text-center mb-2" style={{ backgroundColor: '#CEEDF6'}}>
                                 <div className="card-body">
-                                    <p className="card-text fs-1 fw-bold" style={{ color: '#FEBE4D' }}>Null</p>
+                                    <p className="card-text fs-1 fw-bold" style={{ color: '#FEBE4D' }}>{isClient ? numOfSurveyReports : "Null"}</p>
                                     <p className="card-text fs-3 fw-bold" style={{ color: '#102064' }}>Related report</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     {/* Survey performance detail */}
-                    <div className="mt-3 card" style={{ backgroundColor: '#CEEDF6', position: 'relative' }}>
+                    <div className="mt-3 card" style={{ backgroundColor: '#CEEDF6'}}>
                         <div className="card-body row">
                             <p className="card-text fs-3 fw-bold col-8 d-flex align-items-center" style={{ color: '#102064' }}>How has your response goal been so far?</p>
                             <img src="/chart.svg" className="col-4" alt="Survey performance chart" />

@@ -11,10 +11,9 @@
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import './App.css';
 
-import pb from '../components/pocketbase';
 import useLogin from '../hooks/useLogin';
 import useLogout from '../hooks/useLogout';
-import dbQuery from '../components/dbQuery';
+import dbQuery from '../components/userdbQuery';
 
 import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
@@ -35,7 +34,7 @@ export default function LoginPage() {
 
   const { login, isLoading, error } = useLogin(); // login function
   const logout = useLogout(); // logout function
-  const { isLoggedin, db } = dbQuery(); // database query function
+  const { isLoggedin, userdb } = dbQuery(); // user database query function
 
   // will be called when hydration occurs
   useEffect(() => {
@@ -68,7 +67,7 @@ export default function LoginPage() {
               {isLoading && <p>Logging...</p>}
               <h1>Login state: {isLoggedin ? 'True' : 'False'}</h1>
               {/* make sure pb.authStore.model is not null */}
-              {isLoggedin && <h1>Welcome back, {db?.name}, redirecting in 3 seconds</h1>}
+              {isLoggedin && <h1>Welcome back, {userdb?.name}, redirecting in 3 seconds</h1>}
               {/* redirect after 3 seconds */}
               {isLoggedin && <meta httpEquiv="refresh" content="3;url=/account" />}
               {/* Log out button only appear when logged in*/}
@@ -88,28 +87,24 @@ export default function LoginPage() {
             <h5 className='text-center fw-bold fs-6 mb-4'>Please Log In or Sign Up to continue.</h5>
 
             <form onSubmit={handleSubmit(onSubmit)}>
+              {/* input boxes for credentials */}
               <MDBInput wrapperClass='mb-4' label='User name or email address' size='lg' type='text' {...register('email')} />
               <MDBInput wrapperClass='mb-4' label='Password' size='lg' type='password' {...register('password')} />
 
+              {/* TOS checkbox */}
               <div className='d-flex flex-row justify-content-center mb-4'>
                 <MDBCheckbox className='flexCheck' id='toscheckbox' label='I agree all statements in Terms of service' onChange={handleCheckboxChange} />
               </div>
+
               {/* TODO: separate Sign up and login button to call for 2 different function instead of submitting to a form*/}
               <MDBBtn className='mb-4 w-100' size='lg' style={{ backgroundColor: '#102064' }} disabled={isLoading}>Sign up</MDBBtn>
               <MDBBtn className='mb-4 w-100' size='lg' style={{ backgroundColor: '#FEA200' }} type='submit' disabled={isLoading}>{isLoading ? 'Logging in' : 'Log in'}</MDBBtn>
-              {/* Make login button redirect to /account for now */}
-              {/* <MDBBtn className='mb-4 w-100' size='lg' style={{backgroundColor: '#FEA200'}} href='/account'>Log in</MDBBtn> */}
             </form>
+
             {/* client-side rendering div */}
             {isClient && <div suppressHydrationWarning>
               {isLoading && <p>Logging...</p>}
               <h1>Login state: {isLoggedin ? 'True' : 'False'}</h1>
-              {/* make sure pb.authStore.model is not null */}
-              {isLoggedin && <h1>Welcome back, {db?.name}, redirecting in 3 seconds</h1>}
-              {/* redirect after 3 seconds */}
-              {isLoggedin && <meta httpEquiv="refresh" content="3;url=/account" />}
-              {/* Log out button only appear when logged in*/}
-              {isLoggedin && <MDBBtn className='mb-4 w-100' size='lg' style={{ backgroundColor: '#102064' }} onClick={logout}>Log out</MDBBtn>}
             </div>}
           </MDBCardBody>
         </MDBCard>
