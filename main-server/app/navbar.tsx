@@ -40,7 +40,7 @@ export default function Navbar() {
                             loading="lazy"
                         />
                     </a>
-                    <a className="navbar-brand" href="/management">
+                    <a className="navbar-brand" href="/dashboard_page">
                         <img
                             src="/branding.svg"
                             height="20"

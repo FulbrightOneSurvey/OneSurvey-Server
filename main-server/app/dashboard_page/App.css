@@ -45,12 +45,12 @@
     font: Montserrat #102064;
   }
   
-  #search-and-filter-box{
+  /* #search-and-filter-box{
     background-color: #CEEDF6;
     height: 10vh;
     width: 100%;
     display: inline-block;
-  }
+  } */
   
   #survey-element{
     border-radius: 2%;

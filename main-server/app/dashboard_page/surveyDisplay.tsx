@@ -13,6 +13,7 @@ import {
   MDBInput,
   MDBCheckbox,
 } from "mdb-react-ui-kit";
+import { forEachChild } from "typescript";
 
 export default function surveyDisplay() {
   const [isFetched, setIsFetched] = useState(false); // fetched state to avoid fetching multiple times
@@ -24,6 +25,10 @@ export default function surveyDisplay() {
             filter: "userid = '" + userdb?.id + "'",
         });
     }
+
+    // records.forEach((record:Record) => {
+        
+    // });
   }
 
   return (
