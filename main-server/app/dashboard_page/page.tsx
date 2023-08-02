@@ -24,14 +24,13 @@ export default function Dashboard() {
     setIsClient(true);
   },[])
   return (
-    <MDBContainer>
+    <div>
       <Navbar />
 
       <MDBCard>
         <MDBCardBody className='h-30' style={{backgroundColor: "#CEEDF6"}}>
             <table id='search-and-filter-box'>
-              <th className='ms-2 col-4' id="greeting-diag"
-              style={{fontFamily:'Montserrat'}}>
+              <th className='ms-2 col-4' id="greeting-diag">
                 <span className="d-flex align-items-center ms-3 fs-2 fw-bold">Xin chào, {isClient ? userdb?.name : "Username"}!</span>
                 </th>
               <th>
@@ -46,21 +45,26 @@ export default function Dashboard() {
         </MDBCardBody>
       </MDBCard>
 
-      <MDBCard className='bg-image d-flex align-items-center' style={{backgroundImage: 'url(/MM_BG_Pure_Heart_Valley_Sheriffs_Headquarters.png)', width: '100%', height: '100%', margin: 'auto', marginTop: '1%', borderRadius: 10, backgroundColor:'#102064' }}>
+      <MDBCard className='bg-image d-flex align-items-center' style={{backgroundImage: 'url(/MM_BG_Pure_Heart_Valley_Sheriffs_Headquarters.png)', width: '100%', height: '50vh', margin: 'auto', marginTop: '1%', borderRadius: 10, backgroundColor:'#102064' }}>
 
-        <MDBCardBody>
-          <div className='row' style={{}}>
+        {/* <MDBCardBody> */}
+          {/* <div className='row' style={{}}>
             <div className='col-md-6 pt-4'>{surveyDisplay()}</div>
             <div className='col-md-6 pt-4'>{surveyDisplay()}</div>
           </div>
           <div className='row'>
             <div className='col-md-6 pt-4'>{surveyDisplay()}</div>
             <div className='col-md-6 pt-4'>{surveyDisplay()}</div>
+          </div> */}
+
+          <div className="overflow-auto p-3" style={{ height:'100%', flexDirection: 'row', display: 'flex', overflowX:'hidden', overflowY:'scroll'}}>
+            {surveyDisplay()}
           </div>
-        </MDBCardBody>
+
+        {/* </MDBCardBody> */}
       </MDBCard>
       
-    </MDBContainer>
+    </div>
 
   );
 }
