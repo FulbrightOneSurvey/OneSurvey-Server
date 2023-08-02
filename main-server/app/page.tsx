@@ -1,6 +1,6 @@
 'use-client'
 import LoginPage from './login/page';
-import PageFAQ from '@/FAQ/page';
+import PageFAQ from '@/app/FAQ/page';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 export default function Home() {
