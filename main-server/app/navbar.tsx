@@ -40,17 +40,22 @@ export default function Navbar() {
                             loading="lazy"
                         />
                     </a>
-                    <a className="navbar-brand" href="#">
+                    <a className="navbar-brand" href="/management">
                         <img
                             src="/branding.svg"
                             height="20"
                             alt="Brand Logo"
                             loading="lazy"
+                        
                         />
                     </a>
                     <a className="navbar-brand me-auto" href="/management">
                         {/* Button style banner */}
                         <button type="button" className="btn btn-warning btn-rounded" color="#F9A31A">Get null credit to complete!</button>
+                    </a>
+                    <a className="navbar-brand me-auto" href="/upload">
+                        {/* Button style banner */}
+                        <button type="button" className="btn btn-warning btn-rounded" color="#F9A31A">Create survey</button>
                     </a>
                     <a className="navbar-brand me-auto" href="#">
                         {/* User coin */}

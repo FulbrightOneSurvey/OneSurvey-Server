@@ -45,8 +45,8 @@ export default function UploadPage() {
                 <form>
                     <div className="d-flex justify-content-center align-items-center h-100">
                     
-                    <div className='text-center pb-1'>
-                        <span><h6 className='className="mb-0 fs-3 fw-bold'>Link your survey here!</h6></span>
+                    <div className='text-center pb-3'>
+                        <span><h6 className='mb-0 fs-3 fw-bold'>Link your survey here!</h6></span>
                         <span><p>Copy the URL of your survey and verify the information to ensure that others can know about your survey!</p></span>
                         <input type="url" className="form-control form-control" placeholder='Paste your URL!' required/>
                     </div>
