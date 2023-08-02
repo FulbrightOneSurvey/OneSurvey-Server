@@ -12,6 +12,11 @@ import {
 import Navbar from '../navbar';
 
 export default function AccountPage() {
+    
+    function handleSubmit() {
+        alert("Your account info has changed!");
+    }
+
     return (
         <div>
             {/* Navbar */}
@@ -29,12 +34,12 @@ export default function AccountPage() {
                     <img src="/user.svg" className="card-img-top" alt="User name" />
                 </div>
                 {/* User info card next to profile picture */}
-                <div className="card ms-auto col-xl-9 col-lg-7 col-md-6 col-sm-5" style={{ position: 'relative', height: '15vh' }}>
-                    <div className="card mt-3 me-1 row" style={{ backgroundColor: '#CEEDF6', position: 'relative', height: '15vh' }}>
-                        <p className="card-body d-flex align-items-center ms-3 fs-1 fw-bold col-6">Xin chào, User name!</p>
+                <div className="card ms-auto col-xl-9 col-lg-7 col-md-6 col-sm-5" style={{ position: 'relative'}}>
+                    <div className="card mt-3 me-1 row" style={{ backgroundColor: '#CEEDF6', position: 'relative', height: '12vh' }}>
+                        <p className="card-body d-flex align-items-center ms-3 fs-2 fw-bold col-6">Xin chào, User name!</p>
                         <div className="card-body ms-auto col-6 row">
-                            <p className="fs-1 fw-bold col-8">Credit points:</p>
-                            <p className="card fs-1 fw-bold col-3">Null</p>
+                            <p className="fs-2 fw-bold col-8">Credit points:</p>
+                            <p className="card fs-2 fw-bold col-3">Null</p>
                         </div>
                     </div>
                 </div>
@@ -50,6 +55,8 @@ export default function AccountPage() {
         
             <div className="container py-5 h-100">
                 <div className="row d-flex justify-content-center align-items-center h-100">
+                    
+                    <form id='account' onSubmit={handleSubmit}>
                     <div className="card" style={{backgroundColor: '#CEEDF6', borderRadius: '20px'}}>
                         <div className="card-body">
                             <div className="row align-items-center pt-4 pb-3">
@@ -57,7 +64,7 @@ export default function AccountPage() {
                                     <h6 className="mb-0 fs-3 fw-bold">Full name</h6>
                                 </div>
                                 <div className="col-md-9 pe-5">
-                                    <input type="text" className="form-control form-control-lg" />
+                                    <input id='fulname' type="text" className="form-control form-control-lg" required/>
                                 </div>
                             </div>
                             <hr className="mx-n3"></hr>
@@ -67,7 +74,7 @@ export default function AccountPage() {
                                     <h6 className="mb-0 fs-3 fw-bold">Email</h6>
                                 </div>
                                 <div className="col-md-9 pe-5">
-                                    <input type="email" className="form-control form-control-lg" placeholder='xxx@fulbright.edu.vn' required/>
+                                    <input id='email' type="email" className="form-control form-control-lg" placeholder='xxx@fulbright.edu.vn' required/>
                                 </div>
                             </div>
                             <hr className="mx-n3"></hr>
@@ -77,7 +84,7 @@ export default function AccountPage() {
                                     <h6 className="mb-0 fs-3 fw-bold">Contact info</h6>
                                 </div>
                                 <div className="col-md-9 pe-5">
-                                    <input type="tel" className="form-control form-control-lg" placeholder='(+84)' pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"/>
+                                    <input id='contact' type="tel" className="form-control form-control-lg" placeholder='(+84)' pattern="[0-9]{10}}"/>
                                 </div>
                             </div>
                             <hr className="mx-n3"></hr>
@@ -87,7 +94,7 @@ export default function AccountPage() {
                                     <h6 className="mb-0 fs-3 fw-bold">Birthday</h6>
                                 </div>
                                 <div className="col-md-9 pe-5">
-                                    <input type="date" className="form-control form-control-lg" placeholder='(+84)'/>
+                                    <input id='birthday' type="date" className="form-control form-control-lg"/>
                                 </div>
                             </div>
                             <hr className="mx-n3"></hr>
@@ -97,12 +104,12 @@ export default function AccountPage() {
                                     <h6 className="mb-0 fs-3 fw-bold">School</h6>
                                 </div>
                                 <div className="col-md-9 pe-5">
-                                    <select className="select form-control form-control-lg">
+                                    <select id='school' className="select form-control form-control-lg">
                                         <option value="1" disabled>Choose your university</option>
                                         <option value="2">Fulbright University Vietnam</option>
                                         <option value="3">RMIT University Vietnam</option>
                                         <option value="4">Vietnam National University</option>
-                                        <option value="4">Other</option>
+                                        <option value="5">Other</option>
                                     </select>
                                 </div>
                             </div>                            
@@ -112,6 +119,8 @@ export default function AccountPage() {
                             </div>
                         </div>
                     </div>
+                    </form>
+                    
                     
 
                 </div>
@@ -122,34 +131,4 @@ export default function AccountPage() {
         </div>
     )
 }
-
-
-// async function to retrieve user data from DB
-// async function getUserData() {
-//     const response = await fetch('http://127.0.0.1:8090/api/collections/user/records?page=1%perPage=30')
-//     const data = await response.json();
-//     // return data inside the items array
-//     return data.items;
-// }
-
-// actual main function
-// export default async function AccountPage() {
-//     const userData = await getUserData(); // name, email, datejoined, passwdhash
-//     return (
-//         <div>
-//             <h1>Account</h1>
-//             {/* // loop over userData and display it */}
-//             {userData.map((user) => (
-//                 <div>
-//                     <h2>{user.name}</h2>
-//                     <h2>{user.email}</h2>
-//                     <h2>{user.datejoined}</h2>
-//                     <h2>{user.passwdhash}</h2>
-//                 </div>
-//             ))}
-//         </div>
-//     )
-// }
-
-
 
